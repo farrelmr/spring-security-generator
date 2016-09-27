@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Spring Security Generator</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+	
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+	
+    <!-- Custom CSS -->
+    <style>
+    body {
+        padding-top: 70px;
+        /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+    }
+    </style>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+ <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Spring Security Generator</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="about.html">About</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+	
+	<form class="form-horizontal">
+	
+	    <div class="form-group">
+            <label class="control-label col-sm-2" for="packagename">Package Name:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="packagename" placeholder="com.mypackage.security" onchange="generateSecurityConfig()"/>
+            </div>
+        </div>
+		
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="authenticationProvider">Authentication Provider:</label>
+			<div class="col-sm-10">
+            <select class="form-control" id="authenticationProvider" onchange="generateSecurityConfig()">
+                <option value="1">Memory Realm</option>
+                <option value="2">JDBC Realm (Default)</option>
+                <option value="3">LDAP Realm</option>
+            </select>
+			</div>
+        </div>
+
+	    <div class="form-group" id="userDnPatternsDiv">
+            <label class="control-label col-sm-2" for="userDnPatterns">User Dn Patterns:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="userDnPatterns" placeholder="uid={0},ou=people" onchange="generateSecurityConfig()"/>
+            </div>
+        </div>
+		
+	    <div class="form-group" id="groupSearchBaseDiv">
+            <label class="control-label col-sm-2" for="groupSearchBase">Group Search Base:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="groupSearchBase" placeholder="ou=groups" onchange="generateSecurityConfig()"/>
+            </div>
+        </div>
+			
+    <div id="userroles_div" class="row clearfix">
+		<div class="col-md-12 column">
+		    <p>You must provide usernames, passwords and roles</p>
+			<table class="table table-bordered table-hover" id="users_roles">
+				<thead>
+					<tr>
+						<th class="text-center">
+							#
+						</th>
+						<th class="text-center">
+							Username
+						</th>
+						<th class="text-center">
+							Password
+						</th>
+						<th class="text-center">
+							Groups("group1", "group2", ...)
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr id='userroles0'>
+						<td>
+						1
+						</td>
+						<td>
+						<input type="text" id='username0' name='username0'  placeholder='username' class="form-control" onchange="generateSecurityConfig()"/>
+						</td>
+						<td>
+						<input type="text" id='password0' name='password0' placeholder='password' class="form-control" onchange="generateSecurityConfig()"/>
+						</td>
+						<td>
+						<input type="text" id='group0' name='group0' placeholder='"group1", "group2", ...' class="form-control" onchange="generateSecurityConfig()"/>
+						</td>
+					</tr>
+                    <tr id='userroles1'></tr>
+				</tbody>
+			</table>
+		</div>
+		
+	    <div id="userroles_button" class="col-md-12 column">
+            <a id='delete_row' class="pull-left btn btn-default">Delete Row</a>
+            <a id="add_row" class="pull-right btn btn-default">Add Row</a>
+        </div>		
+	</div>
+	<hr/>
+	
+	<div class="form-group">
+        <label class="control-label col-sm-2" for="springConfig">Authentication Configuration:</label>
+	    <div class="col-sm-10">
+            <select class="form-control" id="springConfig" onchange="generateSecurityConfig()">
+                <option value="1">Default</option>
+                <option value="2">Basic</option>
+                <option value="3">Custom</option>
+            </select>
+		</div>
+    </div>
+	
+	<div id="customAuth">
+	
+	    <div class="form-group" id="noAuthDiv">
+            <label class="control-label col-sm-2" for="noAuthPageURL">No Authentication:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="noAuthPageURL" placeholder="&quot;/signup&quot;,&quot;/about&quot;,&quot;/resources/**&quot;" onchange="generateSecurityConfig()"/>
+            </div>
+        </div>
+		
+	    <div class="form-group" id="loginURLDiv">
+            <label class="control-label col-sm-2" for="loginURL">Login URL:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="loginURL" placeholder="&quot;/login&quot;" onchange="generateSecurityConfig()"/>
+            </div>
+        </div>
+	
+	    <div class="form-group" id="loginURLDiv">
+            <label class="control-label col-sm-2" for="defaultSuccessUrl">Default Success Url:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="defaultSuccessUrl" placeholder="&quot;/home&quot;" onchange="generateSecurityConfig()"/>
+            </div>
+        </div>
+	
+	    <div class="form-group" id="failureUrlDiv">
+            <label class="control-label col-sm-2" for="failureUrl">Failure Url:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="failureUrl" placeholder="&quot;/failure&quot;" onchange="generateSecurityConfig()"/>
+            </div>
+        </div>
+	
+	</div>
+		
+    <br/><br/><br/><br/>
+	
+	</form>
+	
+    <h1>SecurityConfig.java</h1>
+	
+	<div id="SecurityConfigDiv" class="col-md-12 column">
+        <pre id="SecurityConfig" class="prettyprint">
+        </pre>
+	</div>
+
+    <!-- /.container -->
+
+    <!-- jQuery Version 1.11.1 -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>	
+
+	<!--
+	http://bootsnipp.com/snippets/VVyP
+	file:///C:/code/startbootstrap-bare-master/index.html#
+	https://github.com/BlackrockDigital/startbootstrap-bare
+	-->
+	<script lang="javascript">
+	        var i=1;
+    $(document).ready(function(){
+        $("#add_row").click(function(){
+            $('#userroles'+i).html(
+			"<td>"+ (i+1) +"</td>" +
+			"<td><input id='username"+i+"' name='username"+i+"' type='text' placeholder='username' class='form-control input-md' onchange='generateSecurityConfig()'/> </td>" +
+			"<td><input id='password"+i+"' name='password"+i+"' type='text' placeholder='password'  class='form-control input-md' onchange='generateSecurityConfig()'></td>" +
+			"<td><input id='group"+i+"' name='group"+i+"' type='text' placeholder='\"group1\", \"group2\", ...'  class='form-control input-md' onchange='generateSecurityConfig()'></td>");
+
+            $('#users_roles').append('<tr id="userroles'+(i+1)+'"></tr>');
+            i++;  
+        });
+        $("#delete_row").click(function(){
+    	    if(i > 1) {
+		        $("#userroles"+(i-1)).html('');
+    		    i--;
+		    }
+	    });
+		
+		generateSecurityConfig();
+      }	
+	);
+	
+	function getPackageName() {
+	    var packagename = document.getElementById("packagename");
+		if (packagename != null && packagename.value != '') {
+		    packagename = 'package ' + document.getElementById("packagename").value + ';\n\n';
+        } else {
+		    packagename = '';
+		}
+		return packagename;
+	}
+	
+	function getAuthenticationProvider() {
+	    var authenticationProviderName = document.getElementById("authenticationProvider");
+		var authenticationProviderCode = '';
+		if (authenticationProviderName != null && authenticationProviderName.value != '') {
+		    if (authenticationProviderName.value == 1) {
+                // Memory Realm
+				document.getElementById("userroles_div").hidden = false;
+				document.getElementById("userDnPatternsDiv").hidden = true;
+				document.getElementById("groupSearchBaseDiv").hidden = true;
+				
+                authenticationProviderCode =
+				    "	@Autowired\n"+
+                    "	public void configureGlobal(AuthenticationManagerBuilder auth)\n"+
+                    "			throws Exception {\n"+
+                    "		auth.\n"+
+                    "			inMemoryAuthentication()\n"+
+					"" + getUsersPasswordsRoles() + "" +
+                    "	}\n";
+					
+			} else if (authenticationProviderName.value == 2) {
+
+			    // JDBC Realm
+                document.getElementById("userroles_div").hidden = false;
+				document.getElementById("userDnPatternsDiv").hidden = true;
+				document.getElementById("groupSearchBaseDiv").hidden = true;
+				
+                authenticationProviderCode =
+    				"	@Autowired\n" +
+    				"	private DataSource dataSource;\n" +
+    				"\n" +
+    				"	@Autowired\n"+
+                    "	public void configureGlobal(AuthenticationManagerBuilder auth)\n"+
+                    "			throws Exception {\n" +
+                    "         auth\n" +
+                    "             .jdbcAuthentication()\n" +
+                    "                 .dataSource(dataSource)\n" +
+                    "                     .withDefaultSchema();\n" +
+//					"" + getUsersPasswordsRoles() + "" +
+                    "	}\n";
+					
+			} else if (authenticationProviderName.value == 3) {
+			    // LDAP Realm
+                document.getElementById("userroles_div").hidden = true;
+				document.getElementById("userDnPatternsDiv").hidden = false;
+				document.getElementById("groupSearchBaseDiv").hidden = false;
+				
+                authenticationProviderCode =
+    				"	@Autowired\n" +
+    				"	private DataSource dataSource;\n" +
+    				"\n" +
+    				"	@Autowired\n" +
+                    "	public void configureGlobal(AuthenticationManagerBuilder auth)\n" +
+                    "			throws Exception {\n" +
+                    "			auth\n" +
+                    "			.ldapAuthentication()\n" +
+                    "			.userDnPatterns(" + document.getElementById("userDnPatterns").value + ")\n" +
+                    "			.groupSearchBase(" + document.getElementById("groupSearchBase").value + ");\n" +
+                    "	}\n";
+					
+			} else {
+			    authenticationProviderCode = '\n';
+			}
+        } else {
+		    authenticationProviderCode = '\n';
+		}
+		return authenticationProviderCode;
+	}
+	
+	function getUsersPasswordsRoles() {
+	    var usersPasswordsRoles = '';
+	    for (j = 0; j < i; j++) {
+		    if (document.getElementById("username"+j) != null && document.getElementById("username"+j).value != '') {
+			    if (j == 0) {
+				    usersPasswordsRoles = "				.withUser(\"" + document.getElementById("username"+j).value + "\").password(\"" + document.getElementById("password"+j).value + "\").roles(" + document.getElementById("group"+j).value + ");\n"
+				} else {
+				    usersPasswordsRoles = "				.withUser(\"" + document.getElementById("username"+j).value + "\").password(\"" + document.getElementById("password"+j).value + "\").roles(" + document.getElementById("group"+j).value + ").and()\n" + usersPasswordsRoles;
+				}
+			} else {
+			    if (j == 0) {
+			        usersPasswordsRoles = '                     ;\n                     // YOU MUST SUPPLY USERNAMES AND ROLES \n';
+				}
+                break;
+			}
+		}
+		return usersPasswordsRoles;
+	}
+	
+	// http://docs.spring.io/spring-security/site/docs/4.1.3.RELEASE/reference/htmlsingle/
+	//
+	// hellomvc - https://github.com/spring-projects/spring-security/tree/master/samples/javaconfig/hellomvc - MessageSecurityWebApplicationInitializer.java
+	// helloworld - https://github.com/spring-projects/spring-security/tree/master/samples/javaconfig/helloworld - MessageSecurityWebApplicationInitializer.java
+	// hellojs - https://github.com/spring-projects/spring-security/tree/master/samples/javaconfig/hellojs - MessageSecurityWebApplicationInitializer.java
+	// inmemory - https://github.com/spring-projects/spring-security/tree/master/samples/javaconfig/inmemory - MessageSecurityWebApplicationInitializer.java
+	// jdbc - https://github.com/spring-projects/spring-security/tree/master/samples/javaconfig/jdbc - MessageSecurityWebApplicationInitializer.java
+    // ldap - https://github.com/spring-projects/spring-security/tree/master/samples/javaconfig/ldap - MessageSecurityWebApplicationInitializer.java
+    // messages - https://github.com/spring-projects/spring-security/tree/master/samples/javaconfig/messages - ?
+    // form - https://github.com/spring-projects/spring-security/tree/master/samples/javaconfig/form - 
+    // data - https://github.com/spring-projects/spring-security/tree/master/samples/javaconfig/data - ?
+    // aspectj - https://github.com/spring-projects/spring-security/tree/master/samples/javaconfig/aspectj - ?
+	// concurrency - https://github.com/spring-projects/spring-security/tree/master/samples/javaconfig/concurrency - sessionmanagement
+	// openid - https://github.com/spring-projects/spring-security/tree/master/samples/javaconfig/openid
+	// preauth - https://github.com/spring-projects/spring-security/blob/master/samples/javaconfig/preauth
+	// 
+	function getSpringConfiguration() {
+	    var configureCode = '';
+	    if (document.getElementById("springConfig") != null && document.getElementById("springConfig").value != '') {
+		    var springConfig = document.getElementById("springConfig").value;
+			if (springConfig == 1) {
+			    // Do nothing
+				document.getElementById("customAuth").hidden = true;
+			} else if (springConfig == 2) {
+			    // 5.2 HttpSecurity
+				document.getElementById("customAuth").hidden = true;
+                configureCode = 
+                   "    @Override\n"+
+                   "    protected void configure(HttpSecurity http) throws Exception {\n"+
+                   "	    http\n"+
+                   "        .authorizeRequests()\n"+
+                   "            .anyRequest().authenticated()\n"+
+                   "            .and()\n"+
+                   "        .formLogin()\n"+
+                   "    	    .and()\n"+
+                   "        .httpBasic();\n" +
+                   "    }\n";
+			} else if (springConfig == 3) {
+			    document.getElementById("customAuth").hidden = false;
+                configureCode = 
+                   "    @Override\n"+
+                   "    protected void configure(HttpSecurity http) throws Exception {\n"+
+                   "        http\n"+
+                   "            .authorizeRequests()\n";
+				   if (document.getElementById("noAuthPageURL") != null && document.getElementById("noAuthPageURL").value != '') {
+                       configureCode += "                .antMatchers(" + document.getElementById("noAuthPageURL").value + ").permitAll()\n";
+				   }
+				   configureCode += 
+				   "                .anyRequest().authenticated()\n"+
+                   "            .and()\n"+
+                   "                .formLogin()\n"+
+                   "                    .loginPage(" + document.getElementById("loginURL").value + ")\n";
+				   if (document.getElementById("defaultSuccessUrl") != null && document.getElementById("defaultSuccessUrl").value != '') {
+  				       configureCode += "                    .defaultSuccessUrl(" + document.getElementById("defaultSuccessUrl").value + ")\n";
+				   }
+				   if (document.getElementById("failureUrl") != null && document.getElementById("failureUrl").value != '') {
+                       configureCode += "                    .failureUrl(" + document.getElementById("failureUrl").value + ")\n";
+				   }
+                   configureCode += "                    .permitAll()\n"+
+                   "             .and()\n"+
+                   "                .logout()\n"+
+                   "                    .permitAll()\n" +
+				   "                    ;\n"+
+                   "	}\n";
+	        }
+		}
+		return configureCode;
+	}
+	
+	
+	
+	
+	// http://getbootstrap.com/components/#input-groups
+	function generateSecurityConfig() {
+	
+	$('#SecurityConfigDiv').html(
+	"<pre id=\"SecurityConfig\" class=\"prettyprint\">\n" +
+	getPackageName() +
+	"import org.springframework.beans.factory.annotation.Autowired;\n"+
+    "import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;\n"+
+    "import org.springframework.security.config.annotation.web.builders.HttpSecurity;\n"+
+    "import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;\n"+
+    "import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;\n"+
+    "\n"+
+    "@EnableWebSecurity\n"+
+    "public class SecurityConfig extends WebSecurityConfigurerAdapter {\n"+
+    "\n"+
+	getAuthenticationProvider() +
+    "\n"+
+    getSpringConfiguration() +
+    "	\n"+
+    "}\n" +
+	"</pre>"
+	);
+	PR.prettyPrint();
+	}
+	</script>
+	
+</body>
+
+</html>
