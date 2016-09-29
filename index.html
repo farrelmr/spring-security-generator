@@ -155,7 +155,7 @@
             </select>
 		</div>
     </div>
-	
+	<br/><br/>
 	<div id="customAuth">
 	
         <div id="dirsroles_div" class="row clearfix">
@@ -247,7 +247,7 @@
 	https://github.com/BlackrockDigital/startbootstrap-bare
 	-->
 	<script lang="javascript">
-    var i,k=1;
+    var i = 0, k = 1;
     $(document).ready(function(){
         $("#add_row").click(function(){
             $('#userroles'+i).html(
@@ -365,9 +365,20 @@
 		return authenticationProviderCode;
 	}
 	
+	function getDirsroles() {
+	    var dirsroles = 'HERE ' + k + ' \n';
+		for (var m = 0; m < k; m++) {
+		    dirsroles += ' m ' + m + ' k ' + k + "\n";
+		    if (document.getElementById("dirfile"+m) != null && document.getElementById("dirfile"+m).value != '') {
+			    dirsroles = "                .antMatchers(" + document.getElementById("dirfile"+m).value + ").hasAnyRole(" + document.getElementById("groupperm"+m).value + ")\n"
+			}
+		}
+		return dirsroles;
+	}
+	
 	function getUsersPasswordsRoles() {
 	    var usersPasswordsRoles = '';
-	    for (j = 0; j < i; j++) {
+	    for (var j = 0; j < i; j++) {
 		    if (document.getElementById("username"+j) != null && document.getElementById("username"+j).value != '') {
 			    if (j == 0) {
 				    usersPasswordsRoles = "				.withUser(\"" + document.getElementById("username"+j).value + "\").password(\"" + document.getElementById("password"+j).value + "\").roles(" + document.getElementById("group"+j).value + ");\n"
@@ -431,6 +442,7 @@
 				   if (document.getElementById("noAuthPageURL") != null && document.getElementById("noAuthPageURL").value != '') {
                        configureCode += "                .antMatchers(" + document.getElementById("noAuthPageURL").value + ").permitAll()\n";
 				   }
+				   configureCode += getDirsroles();
 				   configureCode += 
 				   "                .anyRequest().authenticated()\n"+
                    "            .and()\n"+
