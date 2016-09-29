@@ -70,9 +70,12 @@ I like the <a href="https://start.spring.io/">Spring Initializr</a> project for 
 whether a menu driven approach could be applied to <a href="http://projects.spring.io/spring-security/">Spring Security</a>. 
                 </p>
 				<p>
-Security requirements are often simple to define(block or allow access to this directory, validate credentials, ...), but
-hard to implement. The idea of this approach is to set out the requirements, and autogenerate the code, and 
-dependencies. It also has the advantage of allowing best practice to be incorporated into the generated code.
+Security requirements are often simple to define -
+                <ul>
+				    <li>Allow or deny access to this directory</li>
+					<li>Validate credentials</li>
+                </ul>
+But hard to implement. The idea of this approach is to set out the requirements, and autogenerate the code, and dependencies. It also has the advantage of allowing best practice to be incorporated into the generated code.
 				</p>
 				<p>
 The generator is written in clients-side Javascript. I think this is important in allowing users of the site confidence to know 
@@ -82,7 +85,7 @@ that their configuration is not being shared with some unknown third-party. The 
 				<p>
                 <ul>
 				    <li>Complete role based authentication</li>
-					<li>Add more base features from Spring Security - rememberme, ...</li>
+					<li>Add more features from Spring Security - rememberme, ...</li>
 					<li>Validation of the Security Wizard</li>
 					<li>Best Practices</li>
 					<li>Store and export configuration</li>

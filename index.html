@@ -158,12 +158,46 @@
 	
 	<div id="customAuth">
 	
-	    <div class="form-group" id="noAuthDiv">
-            <label class="control-label col-sm-2" for="noAuthPageURL">No Authentication:</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="noAuthPageURL" placeholder="&quot;/signup&quot;,&quot;/about&quot;,&quot;/resources/**&quot;" onchange="generateSecurityConfig()"/>
-            </div>
-        </div>
+        <div id="dirsroles_div" class="row clearfix">
+    		<div class="col-md-12 column">
+    			<table class="table table-bordered table-hover" id="dirs_roles">
+    				<thead>
+    					<tr>
+    		    			<th class="text-center">
+    						#
+    	    				</th>
+	    					<th class="text-center">
+							Directory or File
+					    	</th>
+				    		<th class="text-center">
+							Permissions
+			    			</th>
+		    			</tr>
+	    			</thead>
+				    <tbody>
+    					<tr id='dirsroles0'>
+    						<td>
+    						1
+    						</td>
+    						<td>
+    						<input type="text" id='noAuthPageURL' name='noAuthPageURL'  placeholder='&quot;/signup&quot;,&quot;/about&quot;,&quot;/resources/**&quot;' class="form-control" onchange="generateSecurityConfig()"/>
+    						</td>
+    						<td>
+    						<input type="text" id='groupperm0' name='groupperm0' placeholder='No Authentication' class="form-control" readonly />
+    						</td>
+    					</tr>
+                        <tr id='dirsroles1'></tr>
+    				</tbody>
+    			</table>
+    		</div>
+		
+	        <div id="dirsroles_button" class="col-md-12 column">
+                <a id='dirsroles_delete_row' class="pull-left btn btn-default">Delete Row</a>
+                <a id="dirsroles_add_row" class="pull-right btn btn-default">Add Row</a>
+            </div>		
+	    </div>
+		
+	    <br/><br/>
 		
 	    <div class="form-group" id="loginURLDiv">
             <label class="control-label col-sm-2" for="loginURL">Login URL:</label>
@@ -213,7 +247,7 @@
 	https://github.com/BlackrockDigital/startbootstrap-bare
 	-->
 	<script lang="javascript">
-	        var i=1;
+    var i,k=1;
     $(document).ready(function(){
         $("#add_row").click(function(){
             $('#userroles'+i).html(
@@ -229,6 +263,24 @@
     	    if(i > 1) {
 		        $("#userroles"+(i-1)).html('');
     		    i--;
+		    }
+	    });
+		
+        $("#dirsroles_add_row").click(function(){
+		alert(k);
+            $('#dirsroles'+k).html(
+			"<td>"+ (k+1) +"</td>" +
+			"<td><input id='dirfile"+k+"' name='dirfile"+k+"' type='text' placeholder='&quot;/signup&quot;,&quot;/about&quot;,&quot;/resources/**&quot;' class='form-control input-md' onchange='generateSecurityConfig()'/> </td>" +
+			"<td><input id='groupperm"+k+"' name='groupperm"+k+"' type='text' placeholder='ROLE1'  class='form-control input-md' onchange='generateSecurityConfig()'></td>");
+
+            $('#dirs_roles').append('<tr id="dirsroles'+(k+1)+'"></tr>');
+            k++;  
+        });
+		
+        $("#dirsroles_delete_row").click(function(){
+    	    if(k > 1) {
+		        $("#dirsroles"+(k-1)).html('');
+    		    k--;
 		    }
 	    });
 		
@@ -434,3 +486,4 @@
 </body>
 
 </html>
+    
