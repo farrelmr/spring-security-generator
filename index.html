@@ -365,7 +365,7 @@
 	function getDirsroles() {
 	    var dirsroles = k;
 		for (var m = 0; m < k; m++) {
-		    dirsroles += ' m ' + m + ' k ' + k + "\n";
+		    dirsroles += '';
 		    if (document.getElementById("dirfile"+m) != null && document.getElementById("dirfile"+m).value != '') {
 			    dirsroles = "                .antMatchers(" + document.getElementById("dirfile"+m).value + ").hasAnyRole(" + document.getElementById("groupperm"+m).value + ")\n"
 			}
