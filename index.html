@@ -66,6 +66,15 @@
 	
 	<form class="form-horizontal">
 	
+	     <div class="form-group">
+            <label class="control-label col-sm-2" for="springSecVersion">Spring Security Version:</label>
+			<div class="col-sm-10">
+            <select class="form-control" id="springSecVersion">
+                <option value="4">4.x.x</option>
+            </select>
+			</div>
+        </div>
+		
 	    <div class="form-group">
             <label class="control-label col-sm-2" for="packagename">Package Name:</label>
             <div class="col-sm-10">
@@ -202,24 +211,52 @@
 	    <div class="form-group" id="loginURLDiv">
             <label class="control-label col-sm-2" for="loginURL">Login URL:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="loginURL" placeholder="&quot;/login&quot;" onchange="generateSecurityConfig()"/>
+                <input type="text" class="form-control" id="loginURL" placeholder="/login" onchange="generateSecurityConfig()"/>
             </div>
         </div>
 	
 	    <div class="form-group" id="loginURLDiv">
             <label class="control-label col-sm-2" for="defaultSuccessUrl">Default Success Url:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="defaultSuccessUrl" placeholder="&quot;/home&quot;" onchange="generateSecurityConfig()"/>
+                <input type="text" class="form-control" id="defaultSuccessUrl" placeholder="/home" onchange="generateSecurityConfig()"/>
             </div>
         </div>
 	
 	    <div class="form-group" id="failureUrlDiv">
             <label class="control-label col-sm-2" for="failureUrl">Failure Url:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="failureUrl" placeholder="&quot;/failure&quot;" onchange="generateSecurityConfig()"/>
+                <input type="text" class="form-control" id="failureUrl" placeholder="/failure" onchange="generateSecurityConfig()"/>
             </div>
         </div>
-	
+		
+	    <div class="form-group" id="usernameParamDiv">
+            <label class="control-label col-sm-2" for="usernameParam">Username Param:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="usernameParam" placeholder="j_username" onchange="generateSecurityConfig()"/>
+            </div>
+        </div>
+		
+	    <div class="form-group" id="passwordParamDiv">
+            <label class="control-label col-sm-2" for="passwordParam">Password Param:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="passwordParam" placeholder="j_password" onchange="generateSecurityConfig()"/>
+            </div>
+        </div>
+		
+	    <div class="form-group" id="logoutSuccessURLDiv">
+            <label class="control-label col-sm-2" for="logoutSuccessURL">Logout Success URL:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="logoutSuccessURL" placeholder="/logout" onchange="generateSecurityConfig()"/>
+            </div>
+        </div>
+		
+		<div class="form-group" id="exceptionHandlerDiv">
+            <label class="control-label col-sm-2" for="exceptionHandler">Exception Handler - Access Denied Page:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="exceptionHandler" placeholder="/accessDenied" onchange="generateSecurityConfig()"/>
+            </div>
+        </div>
+		
 	</div>
 		
     <br/><br/><br/><br/>
@@ -397,7 +434,7 @@
 	}
 	
 	function getDirsroles() {
-	    var dirsroles = k;
+	    var dirsroles = '';
 		for (var m = 0; m < k; m++) {
 		    dirsroles += '';
 		    if (document.getElementById("dirfile"+m) != null && document.getElementById("dirfile"+m).value != '') {
@@ -463,18 +500,31 @@
 				   "                .anyRequest().authenticated()\n"+
                    "            .and()\n"+
                    "                .formLogin()\n"+
-                   "                    .loginPage(" + document.getElementById("loginURL").value + ")\n";
+                   "                    .loginPage(&quot;" + document.getElementById("loginURL").value + "&quot;)\n";
+				   if (document.getElementById("usernameParam") != null && document.getElementById("usernameParam").value != '') {
+				   configureCode += "                    .usernameParameter(&quot;" + document.getElementById("usernameParam").value + "&quot;)\n";
+                   }
+				   if (document.getElementById("passwordParam") != null && document.getElementById("passwordParam").value != '') {
+				   configureCode += "                    .passwordParameter(&quot;" + document.getElementById("passwordParam").value + "&quot;)\n";
+                   }
+				   
 				   if (document.getElementById("defaultSuccessUrl") != null && document.getElementById("defaultSuccessUrl").value != '') {
-  				       configureCode += "                    .defaultSuccessUrl(" + document.getElementById("defaultSuccessUrl").value + ")\n";
+  				       configureCode += "                    .defaultSuccessUrl(&quot;" + document.getElementById("defaultSuccessUrl").value + "&quot;)\n";
 				   }
 				   if (document.getElementById("failureUrl") != null && document.getElementById("failureUrl").value != '') {
-                       configureCode += "                    .failureUrl(" + document.getElementById("failureUrl").value + ")\n";
+                       configureCode += "                    .failureUrl(&quot;" + document.getElementById("failureUrl").value + "&quot;)\n";
 				   }
                    configureCode += "                    .permitAll()\n"+
                    "             .and()\n"+
-                   "                .logout()\n"+
-                   "                    .permitAll()\n" +
-				   "                    ;\n"+
+                   "                .logout()\n";
+				   if (document.getElementById("logoutSuccessURL") != null && document.getElementById("logoutSuccessURL").value != '') {
+				   configureCode += "                    .logoutSuccessUrl(&quot;" + document.getElementById("logoutSuccessURL").value + "&quot;)\n";
+                   }
+                   configureCode += "                    .permitAll()\n";
+				   if (document.getElementById("exceptionHandler") != null && document.getElementById("exceptionHandler").value != '') {
+				   configureCode += "                    .exceptionHandling().accessDeniedPage(&quot;" + document.getElementById("exceptionHandler").value + "&quot;)\n";
+				   }
+				   configureCode += "                    ;\n"+
                    "	}\n";
 	        }
 		}
