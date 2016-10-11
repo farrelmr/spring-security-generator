@@ -331,7 +331,23 @@
         </div>
       </div>
 			
-	  
+      <div id="rememberme_div" class="row">
+        <div class="col-sm-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Remember Me</h3>
+            </div>
+            <div class="panel-body">
+		<div class="form-group" id="remembermeDiv">
+            <label class="control-label col-sm-3" for="rememberme">Remember Me:</label>
+            <div class="col-sm-9">
+			    <input type="checkbox" id="rememberMe" value="" onchange="generateSecurityConfig()"/>
+            </div>
+        </div>
+            </div>
+          </div>
+        </div>
+      </div>
 		
 	</div>
 	
@@ -603,6 +619,9 @@
                    configureCode += "                    .permitAll()\n";
 				   if (document.getElementById("exceptionHandler") != null && document.getElementById("exceptionHandler").value != '') {
 				   configureCode += "                    .exceptionHandling().accessDeniedPage(&quot;" + document.getElementById("exceptionHandler").value + "&quot;)\n";
+				   }
+                   if (document.getElementById("rememberMe").checked) {
+				   configureCode += "                    .rememberMe()\n";
 				   }
 				   configureCode += "                    ;\n"+
                    "	}\n";
