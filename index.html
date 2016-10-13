@@ -181,19 +181,27 @@
               <h3 class="panel-title">Custom JDBC Configuration</h3>
             </div>
             <div class="panel-body">
-			<p>You must provide custom SQL queries for -
+			<p>You must provide custom SQL queries for - 
 			 <ul>
-              <li>First item</li>
-              <li>Second item</li>
+              <li>Username, password and enabled</li>
+              <li>Username and Roles</li>
              </ul>
 			</p>
-	    <div class="form-group" id="customJDBCDiv">
+	    <div class="form-group" id="customUsersByUsernameQueryJDBCDiv">
             <label class="control-label col-sm-3" for="usersByUsernameQuery">Username, password and enabled:</label>
             <div class="col-sm-9">
-                <input type="text" class="form-control" id="usersByUsernameQuery" placeholder="/logout" onchange="generateSecurityConfig()"/>
+                <input type="text" class="form-control" id="usersByUsernameQuery" placeholder="select username,password, enabled from custom_users where username=?" onchange="generateSecurityConfig()"/>
             </div>
         </div>
-		
+	    <div class="form-group" id="customAuthoritiesByUsernameQueryJDBCDiv">
+            <label class="control-label col-sm-3" for="authoritiesByUsernameQuery">Username and roles:</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="authoritiesByUsernameQuery" placeholder="select username, role from custom_user_roles where username=?" onchange="generateSecurityConfig()"/>
+            </div>
+        </div>		
+            </div>
+          </div>
+        </div>
             </div>
           </div>
         </div>
@@ -563,12 +571,21 @@
                     "         auth\n" +
                     "             .jdbcAuthentication()\n" +
                     "                 .dataSource(dataSource)\n" +
-                    "                   .usersByUsernameQuery(\n" +
-                    "                    \"select username,password, enabled from users where username=?\")\n" +
-                    "                   .authoritiesByUsernameQuery(\n" +
-                    "                    \"select username, role from user_roles where username=?\");\n" +
-                    "	}\n";
-					
+                    "                   .usersByUsernameQuery(\n";
+					//usersByUsernameQuery
+				    if (document.getElementById("usersByUsernameQuery") != null && document.getElementById("usersByUsernameQuery").value != '') {
+                authenticationProviderCode += "                   \"" + document.getElementById("usersByUsernameQuery") + "\")\n";
+				    } else { 
+                authenticationProviderCode += "                    \"select username,password, enabled from users where username=?\")\n";
+				    }
+                authenticationProviderCode += "                   .authoritiesByUsernameQuery(\n";
+					//usersByUsernameQuery
+				    if (document.getElementById("usersByUsernameQuery") != null && document.getElementById("usersByUsernameQuery").value != '') {
+                authenticationProviderCode += "                   \"" + document.getElementById("usersByUsernameQuery") + "\")\n";
+				    } else { 
+                authenticationProviderCode += "                    \"select username,password, enabled from users where username=?\")\n";
+				    }
+                authenticationProviderCode += "	}\n";
 			} else {
 			    authenticationProviderCode = '\n';
 			}
