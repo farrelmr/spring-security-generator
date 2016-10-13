@@ -19,6 +19,7 @@ TaskList
 I intend to add the following features - 
 
 * Expand JDBC
+* REST
 * RememberMe
 * Encryption
 * Test coverage
