@@ -88,6 +88,7 @@
             <select class="form-control" id="authenticationProvider" onchange="generateSecurityConfig()">
                 <option value="1">Memory Realm</option>
                 <option value="2">JDBC Realm (Default)</option>
+                <!--option value="4">JDBC Realm (Custom)</option-->
                 <option value="3">LDAP Realm</option>
             </select>
 			</div>
@@ -173,6 +174,30 @@
 		
 	  </div>
 	  
+      <div id="customJDBC_div" class="row">
+        <div class="col-sm-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Custom JDBC Configuration</h3>
+            </div>
+            <div class="panel-body">
+			<p>You must provide custom SQL queries for -
+			 <ul>
+              <li>First item</li>
+              <li>Second item</li>
+             </ul>
+			</p>
+	    <div class="form-group" id="customJDBCDiv">
+            <label class="control-label col-sm-3" for="usersByUsernameQuery">Username, password and enabled:</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="usersByUsernameQuery" placeholder="/logout" onchange="generateSecurityConfig()"/>
+            </div>
+        </div>
+		
+            </div>
+          </div>
+        </div>
+      </div>
 	<hr/>
 	
 	<div class="form-group">
@@ -466,6 +491,7 @@
 				document.getElementById("userDnPatternsDiv").hidden = true;
 				document.getElementById("groupSearchBaseDiv").hidden = true;
 				document.getElementById("defaultJDBCp").hidden = true;
+				document.getElementById("customJDBC_div").hidden = true;
 				
                 authenticationProviderCode =
 				    "	@Autowired\n"+
@@ -483,6 +509,7 @@
 				document.getElementById("userDnPatternsDiv").hidden = true;
 				document.getElementById("groupSearchBaseDiv").hidden = true;
 				document.getElementById("defaultJDBCp").hidden = false;
+				document.getElementById("customJDBC_div").hidden = true;
 				
                 authenticationProviderCode =
     				"	@Autowired\n" +
@@ -503,6 +530,7 @@
 				document.getElementById("userDnPatternsDiv").hidden = false;
 				document.getElementById("groupSearchBaseDiv").hidden = false;
 				document.getElementById("defaultJDBCp").hidden = true;
+				document.getElementById("customJDBC_div").hidden = true;				
 				
                 authenticationProviderCode =
     				"	@Autowired\n" +
@@ -515,6 +543,30 @@
                     "			.ldapAuthentication()\n" +
                     "			.userDnPatterns(" + document.getElementById("userDnPatterns").value + ")\n" +
                     "			.groupSearchBase(" + document.getElementById("groupSearchBase").value + ");\n" +
+                    "	}\n";
+			} else if (authenticationProviderName.value == 4) {
+
+			    // JDBC Custom Realm
+                document.getElementById("userroles_div").hidden = true;
+				document.getElementById("userDnPatternsDiv").hidden = true;
+				document.getElementById("groupSearchBaseDiv").hidden = true;
+				document.getElementById("defaultJDBCp").hidden = true;
+				document.getElementById("customJDBC_div").hidden = false;
+				
+                authenticationProviderCode =
+    				"	@Autowired\n" +
+    				"	private DataSource dataSource;\n" +
+    				"\n" +
+    				"	@Autowired\n"+
+                    "	public void configureGlobal(AuthenticationManagerBuilder auth)\n"+
+                    "			throws Exception {\n" +
+                    "         auth\n" +
+                    "             .jdbcAuthentication()\n" +
+                    "                 .dataSource(dataSource)\n" +
+                    "                   .usersByUsernameQuery(\n" +
+                    "                    \"select username,password, enabled from users where username=?\")\n" +
+                    "                   .authoritiesByUsernameQuery(\n" +
+                    "                    \"select username, role from user_roles where username=?\");\n" +
                     "	}\n";
 					
 			} else {
