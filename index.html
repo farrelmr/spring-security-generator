@@ -106,11 +106,25 @@
                 <input type="text" class="form-control" id="groupSearchBase" placeholder="ou=groups" onchange="generateSecurityConfig()"/>
             </div>
         </div>
-			
-    <div id="userroles_div" class="row clearfix">
-		<div class="col-md-12 column">
-		    <p>You must provide usernames, passwords and roles</p>
-			<table class="table table-bordered table-hover" id="users_roles">
+		
+    <div id="userroles_div" class="row">
+
+	  <div class="col-sm-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Usernames, passwords and groups</h3>
+            </div>
+            <div class="panel-body">
+		
+    <div id="userroles_div_1" class="row clearfix">
+		<p id="defaultJDBCp">
+		The default <a href="http://docs.spring.io/spring-security/site/docs/current/reference/html/appendix-schema.html">JDBC 
+		schema's</a> are defined on the Spring website. If you are providing custom JDBC tables then you will have to provide your
+		own UserDetailsService implementation.
+		</p>
+		<div class="col-sm-12 column">
+		&nbsp;
+		   <table class="table table-bordered table-hover" id="users_roles">
 				<thead>
 					<tr>
 						<th class="text-center">
@@ -146,12 +160,19 @@
 				</tbody>
 			</table>
 		</div>
-		
-	    <div id="userroles_button" class="col-md-12 column">
+		&nbsp;
+	    <div id="userroles_button" class="col-sm-12 column">
             <a id='delete_row' class="pull-left btn btn-default">Delete Row</a>
             <a id="add_row" class="pull-right btn btn-default">Add Row</a>
         </div>		
 	</div>
+	
+            </div>
+          </div>
+        </div>
+		
+	  </div>
+	  
 	<hr/>
 	
 	<div class="form-group">
@@ -167,8 +188,16 @@
 	<br/><br/>
 	<div id="customAuth">
 	
+      <div id="customAuth_div" class="row">
+        <div class="col-sm-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Directories, Files and Group Permissions</h3>
+            </div>
+            <div class="panel-body">
+					&nbsp;
         <div id="dirsroles_div" class="row clearfix">
-    		<div class="col-md-12 column">
+    		<div class="col-sm-12 column">
     			<table class="table table-bordered table-hover" id="dirs_roles">
     				<thead>
     					<tr>
@@ -200,35 +229,44 @@
     			</table>
     		</div>
 		
-	        <div id="dirsroles_button" class="col-md-12 column">
+	        <div id="dirsroles_button" class="col-sm-12 column">
                 <a id='dirsroles_delete_row' class="pull-left btn btn-default">Delete Row</a>
                 <a id="dirsroles_add_row" class="pull-right btn btn-default">Add Row</a>
             </div>		
 	    </div>
-		
-	    <br/><br/>
-		
-	    <div class="form-group" id="loginURLDiv">
-            <label class="control-label col-sm-2" for="loginURL">Login URL:</label>
-            <div class="col-sm-10">
+		&nbsp;
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="customAuth_div" class="row">
+        <div class="col-sm-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Form Login</h3>
+            </div>
+            <div class="panel-body">
+	    <div class="form-group col-sm-6" id="loginURLDiv">
+            <label class="control-label col-sm-4" for="loginURL">Login URL:</label>
+            <div class="col-sm-8">
                 <input type="text" class="form-control" id="loginURL" placeholder="/login" onchange="generateSecurityConfig()"/>
             </div>
         </div>
-	
-	    <div class="form-group" id="loginURLDiv">
-            <label class="control-label col-sm-2" for="defaultSuccessUrl">Default Success Url:</label>
-            <div class="col-sm-10">
+	    <div class="form-group col-sm-6" id="defaultSuccessUrlDiv">
+            <label class="control-label col-sm-4" for="defaultSuccessUrl">Default Success Url:</label>
+            <div class="col-sm-8">
                 <input type="text" class="form-control" id="defaultSuccessUrl" placeholder="/home" onchange="generateSecurityConfig()"/>
             </div>
         </div>
-	
 	    <div class="form-group" id="failureUrlDiv">
             <label class="control-label col-sm-2" for="failureUrl">Failure Url:</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" id="failureUrl" placeholder="/failure" onchange="generateSecurityConfig()"/>
             </div>
         </div>
-		
+		<p>The following fields are the form fields on your login form. Its advisable to 
+		change them for security reasons, but you need to make sure your map the fields to your form.</p>
 	    <div class="form-group" id="loginProcessingUrlDiv">
             <label class="control-label col-sm-2" for="loginProcessingUrl">Login Processing URL:</label>
             <div class="col-sm-10">
@@ -236,48 +274,93 @@
             </div>
         </div>
 		
-	    <div class="form-group" id="usernameParamDiv">
-            <label class="control-label col-sm-2" for="usernameParam">Username Param:</label>
-            <div class="col-sm-10">
+	    <div class="form-group col-sm-6" id="usernameParamDiv">
+            <label class="control-label col-sm-4" for="usernameParam">Username Param:</label>
+            <div class="col-sm-8">
                 <input type="text" class="form-control" id="usernameParam" placeholder="j_username" onchange="generateSecurityConfig()"/>
             </div>
         </div>
 		
-	    <div class="form-group" id="passwordParamDiv">
-            <label class="control-label col-sm-2" for="passwordParam">Password Param:</label>
-            <div class="col-sm-10">
+	    <div class="form-group col-sm-6" id="passwordParamDiv">
+            <label class="control-label col-sm-4" for="passwordParam">Password Param:</label>
+            <div class="col-sm-8">
                 <input type="text" class="form-control" id="passwordParam" placeholder="j_password" onchange="generateSecurityConfig()"/>
             </div>
         </div>
-		
+
+            </div>
+          </div>
+        </div>
+      </div>
+	  
+      <div id="logout_div" class="row">
+        <div class="col-sm-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Logout</h3>
+            </div>
+            <div class="panel-body">
+			
 	    <div class="form-group" id="logoutSuccessURLDiv">
-            <label class="control-label col-sm-2" for="logoutSuccessURL">Logout Success URL:</label>
-            <div class="col-sm-10">
+            <label class="control-label col-sm-3" for="logoutSuccessURL">Logout Success URL:</label>
+            <div class="col-sm-9">
                 <input type="text" class="form-control" id="logoutSuccessURL" placeholder="/logout" onchange="generateSecurityConfig()"/>
             </div>
         </div>
 		
+            </div>
+          </div>
+        </div>
+      </div>
+	  
+      <div id="exceptionHandler_div" class="row">
+        <div class="col-sm-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Exception Handler</h3>
+            </div>
+            <div class="panel-body">
 		<div class="form-group" id="exceptionHandlerDiv">
-            <label class="control-label col-sm-2" for="exceptionHandler">Exception Handler - Access Denied Page:</label>
-            <div class="col-sm-10">
+            <label class="control-label col-sm-3" for="exceptionHandler">Access Denied Page:</label>
+            <div class="col-sm-9">
                 <input type="text" class="form-control" id="exceptionHandler" placeholder="/accessDenied" onchange="generateSecurityConfig()"/>
             </div>
         </div>
+            </div>
+          </div>
+        </div>
+      </div>
+			
+      <div id="rememberme_div" class="row">
+        <div class="col-sm-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Remember Me</h3>
+            </div>
+            <div class="panel-body">
+		<div class="form-group" id="remembermeDiv">
+            <label class="control-label col-sm-3" for="rememberme">Remember Me:</label>
+            <div class="col-sm-9">
+			    <input type="checkbox" id="rememberMe" value="" onchange="generateSecurityConfig()"/>
+            </div>
+        </div>
+            </div>
+          </div>
+        </div>
+      </div>
 		
 	</div>
-		
-    <br/><br/><br/><br/>
 	
 	</form>
 	
     <h1>SecurityConfig.java</h1>
 	
-	<div id="SecurityConfigDiv" class="col-md-12 column">
+	<div id="SecurityConfigDiv" class="col-sm-12 column">
         <pre id="SecurityConfig" class="prettyprint">
         </pre>
 	</div>
 	
-	<div id="github-gist" class="col-md-12 column">
+	<div id="github-gist" class="col-sm-12 column">
 		<a id="save" class="pull-left btn btn-default">Upload To Gist</a>&nbsp;&nbsp;&nbsp;&nbsp;
         <a id="gisturl" href=""></a>
 	</div>
@@ -299,9 +382,9 @@
         $("#add_row").click(function(){
             $('#userroles'+i).html(
 			"<td>"+ (i+1) +"</td>" +
-			"<td><input id='username"+i+"' name='username"+i+"' type='text' placeholder='username' class='form-control input-md' onchange='generateSecurityConfig()'/> </td>" +
-			"<td><input id='password"+i+"' name='password"+i+"' type='text' placeholder='password'  class='form-control input-md' onchange='generateSecurityConfig()'></td>" +
-			"<td><input id='group"+i+"' name='group"+i+"' type='text' placeholder='\"group1\", \"group2\", ...'  class='form-control input-md' onchange='generateSecurityConfig()'></td>");
+			"<td><input id='username"+i+"' name='username"+i+"' type='text' placeholder='username' class='form-control input-sm' onchange='generateSecurityConfig()'/> </td>" +
+			"<td><input id='password"+i+"' name='password"+i+"' type='text' placeholder='password'  class='form-control input-sm' onchange='generateSecurityConfig()'></td>" +
+			"<td><input id='group"+i+"' name='group"+i+"' type='text' placeholder='\"group1\", \"group2\", ...'  class='form-control input-sm' onchange='generateSecurityConfig()'></td>");
 
             $('#users_roles').append('<tr id="userroles'+(i+1)+'"></tr>');
             i++;  
@@ -316,8 +399,8 @@
         $("#dirsroles_add_row").click(function(){
             $('#dirsroles'+k).html(
 			"<td>"+ (k+1) +"</td>" +
-			"<td><input id='dirfile"+k+"' name='dirfile"+k+"' type='text' placeholder='&quot;/signup&quot;,&quot;/about&quot;,&quot;/resources/**&quot;' class='form-control input-md' onchange='generateSecurityConfig()'/> </td>" +
-			"<td><input id='groupperm"+k+"' name='groupperm"+k+"' type='text' placeholder='ROLE1'  class='form-control input-md' onchange='generateSecurityConfig()'></td>");
+			"<td><input id='dirfile"+k+"' name='dirfile"+k+"' type='text' placeholder='&quot;/signup&quot;,&quot;/about&quot;,&quot;/resources/**&quot;' class='form-control input-sm' onchange='generateSecurityConfig()'/> </td>" +
+			"<td><input id='groupperm"+k+"' name='groupperm"+k+"' type='text' placeholder='ROLE1'  class='form-control input-sm' onchange='generateSecurityConfig()'></td>");
 
             $('#dirs_roles').append('<tr id="dirsroles'+(k+1)+'"></tr>');
             k++;  
@@ -382,6 +465,7 @@
 				document.getElementById("userroles_div").hidden = false;
 				document.getElementById("userDnPatternsDiv").hidden = true;
 				document.getElementById("groupSearchBaseDiv").hidden = true;
+				document.getElementById("defaultJDBCp").hidden = true;
 				
                 authenticationProviderCode =
 				    "	@Autowired\n"+
@@ -398,6 +482,7 @@
                 document.getElementById("userroles_div").hidden = false;
 				document.getElementById("userDnPatternsDiv").hidden = true;
 				document.getElementById("groupSearchBaseDiv").hidden = true;
+				document.getElementById("defaultJDBCp").hidden = false;
 				
                 authenticationProviderCode =
     				"	@Autowired\n" +
@@ -417,6 +502,7 @@
                 document.getElementById("userroles_div").hidden = true;
 				document.getElementById("userDnPatternsDiv").hidden = false;
 				document.getElementById("groupSearchBaseDiv").hidden = false;
+				document.getElementById("defaultJDBCp").hidden = true;
 				
                 authenticationProviderCode =
     				"	@Autowired\n" +
@@ -533,6 +619,9 @@
                    configureCode += "                    .permitAll()\n";
 				   if (document.getElementById("exceptionHandler") != null && document.getElementById("exceptionHandler").value != '') {
 				   configureCode += "                    .exceptionHandling().accessDeniedPage(&quot;" + document.getElementById("exceptionHandler").value + "&quot;)\n";
+				   }
+                   if (document.getElementById("rememberMe").checked) {
+				   configureCode += "                    .rememberMe()\n";
 				   }
 				   configureCode += "                    ;\n"+
                    "	}\n";
