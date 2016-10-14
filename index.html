@@ -88,7 +88,7 @@
             <select class="form-control" id="authenticationProvider" onchange="generateSecurityConfig()">
                 <option value="1">Memory Realm</option>
                 <option value="2">JDBC Realm (Default)</option>
-                <!--option value="4">JDBC Realm (Custom)</option-->
+                <option value="4">JDBC Realm (Custom)</option>
                 <option value="3">LDAP Realm</option>
             </select>
 			</div>
@@ -107,6 +107,36 @@
                 <input type="text" class="form-control" id="groupSearchBase" placeholder="ou=groups" onchange="generateSecurityConfig()"/>
             </div>
         </div>
+		
+<div id="customJDBC_div" class="row">
+   <div class="col-sm-12">
+      <div class="panel panel-default">
+         <div class="panel-heading">
+            <h3 class="panel-title">Custom JDBC Configuration</h3>
+         </div>
+         <div class="panel-body">
+            <p>You must provide custom SQL queries for - 
+            <ul>
+               <li>Username, password and enabled</li>
+               <li>Username and Roles</li>
+            </ul>
+            </p>
+            <div class="form-group" id="customUsersByUsernameQueryJDBCDiv">
+               <label class="control-label col-sm-3" for="usersByUsernameQuery">Username, password and enabled:</label>
+               <div class="col-sm-9">
+                  <input type="text" class="form-control" id="usersByUsernameQuery" placeholder="select username,password, enabled from custom_users where username=?" onchange="generateSecurityConfig()"/>
+               </div>
+            </div>
+            <div class="form-group" id="customAuthoritiesByUsernameQueryJDBCDiv">
+               <label class="control-label col-sm-3" for="authoritiesByUsernameQuery">Username and roles:</label>
+               <div class="col-sm-9">
+                  <input type="text" class="form-control" id="authoritiesByUsernameQuery" placeholder="select username, role from custom_user_roles where username=?" onchange="generateSecurityConfig()"/>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
 		
     <div id="userroles_div" class="row">
 
@@ -174,38 +204,6 @@
 		
 	  </div>
 	  
-      <div id="customJDBC_div" class="row">
-        <div class="col-sm-12">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">Custom JDBC Configuration</h3>
-            </div>
-            <div class="panel-body">
-			<p>You must provide custom SQL queries for - 
-			 <ul>
-              <li>Username, password and enabled</li>
-              <li>Username and Roles</li>
-             </ul>
-			</p>
-	    <div class="form-group" id="customUsersByUsernameQueryJDBCDiv">
-            <label class="control-label col-sm-3" for="usersByUsernameQuery">Username, password and enabled:</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="usersByUsernameQuery" placeholder="select username,password, enabled from custom_users where username=?" onchange="generateSecurityConfig()"/>
-            </div>
-        </div>
-	    <div class="form-group" id="customAuthoritiesByUsernameQueryJDBCDiv">
-            <label class="control-label col-sm-3" for="authoritiesByUsernameQuery">Username and roles:</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="authoritiesByUsernameQuery" placeholder="select username, role from custom_user_roles where username=?" onchange="generateSecurityConfig()"/>
-            </div>
-        </div>		
-            </div>
-          </div>
-        </div>
-            </div>
-          </div>
-        </div>
-      </div>
 	<hr/>
 	
 	<div class="form-group">
@@ -576,14 +574,14 @@
 				    if (document.getElementById("usersByUsernameQuery") != null && document.getElementById("usersByUsernameQuery").value != '') {
                 authenticationProviderCode += "                   \"" + document.getElementById("usersByUsernameQuery") + "\")\n";
 				    } else { 
-                authenticationProviderCode += "                    \"select username,password, enabled from users where username=?\")\n";
+                authenticationProviderCode += "                    \"Enter your SQL Query Here\")\n";
 				    }
                 authenticationProviderCode += "                   .authoritiesByUsernameQuery(\n";
 					//usersByUsernameQuery
 				    if (document.getElementById("usersByUsernameQuery") != null && document.getElementById("usersByUsernameQuery").value != '') {
                 authenticationProviderCode += "                   \"" + document.getElementById("usersByUsernameQuery") + "\")\n";
 				    } else { 
-                authenticationProviderCode += "                    \"select username,password, enabled from users where username=?\")\n";
+                authenticationProviderCode += "                    \"Enter your SQL Query Here\")\n";
 				    }
                 authenticationProviderCode += "	}\n";
 			} else {
