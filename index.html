@@ -710,6 +710,7 @@
 	   var securityConfigCode = '';
 	   securityConfigCode += 	      
 	      getPackageName() +
+		  "import javax.sql.DataSource;\n"+
 	      "import org.springframework.beans.factory.annotation.Autowired;\n"+
           "import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;\n"+
           "import org.springframework.security.config.annotation.web.builders.HttpSecurity;\n"+
