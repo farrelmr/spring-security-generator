@@ -527,7 +527,8 @@
                     "         auth\n" +
                     "             .jdbcAuthentication()\n" +
                     "                 .dataSource(dataSource)\n" +
-                    "                     .withDefaultSchema();\n" +
+                    "                     .withDefaultSchema()\n" +
+					"" + getUsersPasswordsRoles() + "" +
                     "	}\n";
 					
 			} else if (authenticationProviderName.value == 3) {
@@ -577,11 +578,11 @@
                 authenticationProviderCode += "                    \"Enter your SQL Query Here\")\n";
 				    }
                 authenticationProviderCode += "                   .authoritiesByUsernameQuery(\n";
-					//usersByUsernameQuery
-				    if (document.getElementById("usersByUsernameQuery") != null && document.getElementById("usersByUsernameQuery").value != '') {
-                authenticationProviderCode += "                   \"" + document.getElementById("usersByUsernameQuery").value + "\")\n";
+					//authoritiesByUsernameQuery
+				    if (document.getElementById("authoritiesByUsernameQuery") != null && document.getElementById("authoritiesByUsernameQuery").value != '') {
+                authenticationProviderCode += "                   \"" + document.getElementById("authoritiesByUsernameQuery").value + "\");\n";
 				    } else { 
-                authenticationProviderCode += "                    \"Enter your SQL Query Here\")\n";
+                authenticationProviderCode += "                    \"Enter your SQL Query Here\");\n";
 				    }
                 authenticationProviderCode += "	}\n";
 			} else {
