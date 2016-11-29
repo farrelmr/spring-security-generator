@@ -133,6 +133,17 @@
                   <input type="text" class="form-control" id="authoritiesByUsernameQuery" placeholder="select username, role from custom_user_roles where username=?" onchange="generateSecurityConfig()"/>
                </div>
             </div>
+            <div class="form-group" id="encryptionJDBCDiv">
+               <label class="control-label col-sm-3" for="authoritiesByUsernameQuery">Encryption/Encoding:</label>
+               <div class="col-sm-9">
+            <select class="form-control" id="encryption" onchange="generateSecurityConfig()">
+                <option value="0">None</option>
+                <option value="1">BCryptPasswordEncoder(Recommended)</option>
+                <option value="2">StandardPasswordEncoder</option>
+				<option value="3">NoOpPasswordEncoder</option>
+            </select>
+               </div>
+            </div>
          </div>
       </div>
    </div>
@@ -379,7 +390,7 @@
           </div>
         </div>
       </div>
-		
+				
 	</div>
 	
 	</form>
@@ -468,7 +479,6 @@
       .success( 
 	    function(e) {
            $("#gisturl").text(e.html_url);
-           //$("#gisturl").href(e.html_url);
 		   $("#gisturl").attr('href',e.html_url);
       })
       .error( function(e) {
@@ -516,7 +526,7 @@
 				document.getElementById("groupSearchBaseDiv").hidden = true;
 				document.getElementById("defaultJDBCp").hidden = false;
 				document.getElementById("customJDBC_div").hidden = true;
-				
+
                 authenticationProviderCode =
     				"	@Autowired\n" +
     				"	private DataSource dataSource;\n" +
@@ -563,12 +573,45 @@
                 authenticationProviderCode =
     				"	@Autowired\n" +
     				"	private DataSource dataSource;\n" +
-    				"\n" +
+    				"\n";
+				
+				 var passwordEncoder = document.getElementById("encryption");
+				 if (passwordEncoder.value == 1) {
+                    authenticationProviderCode +=
+    				"	@Bean\n" +
+    				"	public PasswordEncoder passwordEncoder() {\n" +
+    				"	    return new BCryptPasswordEncoder();\n" +
+    				"	}" +
+    				"\n";
+			     }
+				 if (passwordEncoder.value == 2) {
+                    authenticationProviderCode +=
+    				"	@Bean\n" +
+    				"	public PasswordEncoder passwordEncoder() {\n" +
+    				"	    return new StandardPasswordEncoder();\n" +
+    				"	}" +
+    				"\n";
+			     }
+				 if (passwordEncoder.value == 3) {
+                    authenticationProviderCode +=
+    				"	@Bean\n" +
+    				"	public PasswordEncoder passwordEncoder() {\n" +
+    				"	    return NoOpPasswordEncoder.getInstance();\n" +
+    				"	}" +
+    				"\n";
+			     }
+					
+                authenticationProviderCode +=
     				"	@Autowired\n"+
                     "	public void configureGlobal(AuthenticationManagerBuilder auth)\n"+
                     "			throws Exception {\n" +
                     "         auth\n" +
-                    "             .jdbcAuthentication()\n" +
+                    "             .jdbcAuthentication()\n";
+				 var passwordEncoder = document.getElementById("encryption");
+				 if (passwordEncoder.value == 1 || passwordEncoder.value == 2 || passwordEncoder.value == 3) {
+				     authenticationProviderCode += "                 .passwordEncoder(passwordEncoder())\n";
+			     }
+				 authenticationProviderCode += 
                     "                 .dataSource(dataSource)\n" +
                     "                   .usersByUsernameQuery(\n";
 					//usersByUsernameQuery
@@ -712,12 +755,18 @@
 	   securityConfigCode += 	      
 	      getPackageName() +
 		  "import javax.sql.DataSource;\n"+
+		  "import org.springframework.context.annotation.Bean;\n"+
 	      "import org.springframework.beans.factory.annotation.Autowired;\n"+
           "import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;\n"+
           "import org.springframework.security.config.annotation.web.builders.HttpSecurity;\n"+
           "import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;\n"+
           "import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;\n"+
           "\n"+
+          "import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;\n"+
+          "import org.springframework.security.crypto.password.PasswordEncoder;\n"+
+          "import org.springframework.security.crypto.password.NoOpPasswordEncoder;\n"+
+          "import org.springframework.security.crypto.password.StandardPasswordEncoder;\n"+
+		  "\n"+
           "@EnableWebSecurity\n"+
           "public class SecurityConfig extends WebSecurityConfigurerAdapter {\n"+
           "\n"+
